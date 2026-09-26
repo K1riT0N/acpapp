@@ -26,28 +26,31 @@ Open:
 - FastAPI: `http://localhost:8000`
 - FastAPI docs: `http://localhost:8000/docs`
 
-## Demo login
-
-- Email: `demo@example.com`
-- Password: `password`
-
-The demo password is stored as a bcrypt hash in PostgreSQL.
-
 ## Pages
 
 - `/` — static landing page with example user cards
-- `/login` — login form using native `fetch()`
+- `/login` — login form using the FastAPI auth API
 
 ## API
 
-### POST `/api/login`
+### GET `/health`
+
+Checks that the backend can reach the database. Returns `503` if the database is unavailable.
+
+### POST `/api/auth/register`
+
+Creates a customer or business account and sets an HTTP-only session cookie.
+
+### POST `/api/auth/login`
 
 Request:
 
 ```json
 {
-  "email": "demo@example.com",
-  "password": "password"
+  "email": "user@example.com",
+  "password": "password123",
+  "full_name": "Example User",
+  "role": "customer"
 }
 ```
 
@@ -55,28 +58,23 @@ Response:
 
 ```json
 {
-  "email": "demo@example.com",
-  "token": "..."
+  "id": "...",
+  "email": "user@example.com",
+  "full_name": "Example User",
+  "role": "customer",
+  "subscription_tier": null
 }
 ```
 
-Next.js rewrites `/api/*` to the FastAPI container, so frontend code can call relative URLs such as:
-
-```js
-const response = await fetch("/api/login", { ... })
-```
+The frontend sends credentials with requests so the HTTP-only session cookie is used for `/api/auth/me` and other protected endpoints.
 
 ## Database
 
-The starter intentionally has only one table:
+The backend creates these tables from the SQLAlchemy models in `backend-api/database.py`:
 
 ```sql
-users (
-  email      primary key,
-  password   not null,
-  token,
-  create_at  not null
-)
+users (...)
+businesses (...)
 ```
 
 The `password` column stores a bcrypt hash, not plaintext.
@@ -89,8 +87,11 @@ The `password` column stores a bcrypt hash, not plaintext.
 ├── backend-api/
 │   ├── app.py
 │   ├── database.py
+│   ├── deps.py
 │   ├── routes/
 │   │   └── auth.py
+│   ├── schemas.py
+│   └── security.py
 │   └── requirements.txt
 └── nextjs/
     ├── components/ui/

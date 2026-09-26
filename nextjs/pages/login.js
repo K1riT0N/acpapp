@@ -11,11 +11,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { api } from "@/lib/api";
 
 export default function Login() {
   const router = useRouter();
-  const [email, setEmail] = useState("demo@example.com");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -25,22 +26,10 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/login", {
+      await api("/api/auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+        body: { email, password },
       });
-
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.detail || "Login failed");
-      }
-
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("email", data.email);
       router.push("/");
     } catch (err) {
       setError(err.message);
@@ -93,6 +82,10 @@ export default function Login() {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Logging in..." : "Log in"}
             </Button>
+
+            <p className="text-center text-sm text-muted-foreground">
+              New to Nadd? <Link href="/register" className="font-medium text-foreground underline underline-offset-4">Sign up</Link>
+            </p>
 
             <Button asChild variant="outline" className="w-full">
               <Link href="/">Back to landing page</Link>

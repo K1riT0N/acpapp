@@ -7,16 +7,15 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from database import get_db
+from database import Base, engine, get_db
 from routes.auth import router as auth_router
-from routes.auth import setup_demo_users
 
 FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    setup_demo_users()
+    Base.metadata.create_all(bind=engine)
     yield
 
 
