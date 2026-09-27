@@ -26,11 +26,11 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await api("/api/auth/login", {
+      const user = await api("/api/auth/login", {
         method: "POST",
         body: { email, password },
       });
-      router.push("/");
+      router.push(user.role === "business" ? "/dashboard" : "/");
     } catch (err) {
       setError(err.message);
     } finally {
