@@ -10,7 +10,7 @@ services:
     working_dir: /src
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
-      WATCHPACK_POLLING: "true"   # makes hot reload notice file changes on Windows
+      WATCHPACK_POLLING: "true"
     command: npm run dev
     depends_on:
       backend-api:
@@ -25,7 +25,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - nadd_db_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
@@ -60,4 +60,4 @@ services:
 
 volumes:
   # Postgres 16 cannot read the old Postgres 13 volume (postgres_data), so it uses a new one.
-  db_data:
+  nadd_db_data:

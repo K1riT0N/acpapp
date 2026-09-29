@@ -5,19 +5,19 @@
 /* shadcn/ui colour variables, used only by components/ui (Button, Card, Input) */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --background: 230 37% 11%;
+    --foreground: 228 38% 95%;
+    --card: 225 36% 16%;
+    --card-foreground: 228 38% 95%;
+    --primary: 42 84% 61%;
+    --primary-foreground: 40 100% 8%;
+    --secondary: 225 37% 18%;
+    --secondary-foreground: 228 38% 95%;
+    --muted: 225 37% 18%;
+    --muted-foreground: 225 17% 62%;
+    --border: 225 32% 25%;
+    --input: 225 32% 25%;
+    --ring: 42 84% 61%;
     --radius: 0.5rem;
   }
 }
@@ -28,29 +28,15 @@ a { text-decoration: underline; }
 
 /* ===== Nadd design, copied unchanged from the prototype's <style> block (nadd-booking.html) ===== */
 :root{
-  --bg:#F1F3F7;--surface:#FFFFFF;--surface-2:#F6F7FA;--ink:#16203D;--ink-2:#495271;--muted:#737B94;--line:#DCE1EA;--line-2:#C4CBD8;
-  --accent:#EBA81B;--accent-ink:#402900;--accent-soft:#FCEFD0;
-  --ok:#0B775E;--ok-soft:#DAF1E8;--warn:#8A5600;--warn-soft:#FBEBC9;--bad:#AE3A2E;--bad-soft:#F8E0DC;--done:#3A4775;--done-soft:#E2E6F3;
-  --focus:#2E6BE6;
-  --display:"Bai Jamjuree","Anuphan",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --body:"Anuphan",system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif;
-  --r-sm:7px;--r-md:12px;
-  color-scheme:light;box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0F1426;--surface:#171E35;--surface-2:#1D2540;--ink:#EBEEF7;--ink-2:#B1B8CD;--muted:#8A92AB;--line:#2A3352;--line-2:#3A4466;
-    --accent:#F0B544;--accent-ink:#2A1B00;--accent-soft:#3A2D10;
-    --ok:#52C9A6;--ok-soft:#12362F;--warn:#F0B544;--warn-soft:#3A2D10;--bad:#F08C80;--bad-soft:#3D1E1B;--done:#A9B6E8;--done-soft:#232C4B;
-    --focus:#7FA6FF;color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
   --bg:#0F1426;--surface:#171E35;--surface-2:#1D2540;--ink:#EBEEF7;--ink-2:#B1B8CD;--muted:#8A92AB;--line:#2A3352;--line-2:#3A4466;
   --accent:#F0B544;--accent-ink:#2A1B00;--accent-soft:#3A2D10;
   --ok:#52C9A6;--ok-soft:#12362F;--warn:#F0B544;--warn-soft:#3A2D10;--bad:#F08C80;--bad-soft:#3D1E1B;--done:#A9B6E8;--done-soft:#232C4B;
-  --focus:#7FA6FF;color-scheme:dark;
+  --focus:#7FA6FF;
+  --display:"Bai Jamjuree","Anuphan",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --body:"Anuphan",system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif;
+  --r-sm:7px;--r-md:12px;
+  color-scheme:dark;box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 }
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:inherit}
