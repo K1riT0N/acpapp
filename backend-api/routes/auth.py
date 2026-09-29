@@ -1,76 +1,58 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+"""/auth: sign up, log in, who am I, and the demo accounts for the login page."""
+from fastapi import APIRouter, Depends
+from sqlalchemy import case, select
 from sqlalchemy.orm import Session
 
-from database import Business, User, UserRole, get_db
-from deps import COOKIE_NAME, get_current_user
-from schemas import LoginRequest, RegisterRequest, UserOut
-from security import create_access_token, hash_password, verify_password
+from core import accounts
+from core.limits import plan_of
+from database import get_db
+from models import User
+from schemas import AuthOut, DemoAccountOut, LoginIn, RegisterIn, UserOut
+from security import create_token, get_current_user
 
-router = APIRouter(prefix="/auth", tags=["auth"])
-COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24
-
-
-def _set_auth_cookie(response: Response, user: User) -> None:
-    token = create_access_token(str(user.id), user.role.value)
-    response.set_cookie(
-        key=COOKIE_NAME,
-        value=token,
-        httponly=True,
-        samesite="lax",
-        max_age=COOKIE_MAX_AGE_SECONDS,
-    )
+router = APIRouter()
 
 
-def _to_user_out(user: User) -> UserOut:
-    tier = user.business.subscription_tier if user.role == UserRole.business and user.business else None
-    return UserOut(
-        id=user.id,
-        email=user.email,
-        full_name=user.full_name,
-        role=user.role,
-        subscription_tier=tier,
-    )
+def user_out(user: User) -> UserOut:
+    out = UserOut.model_validate(user)
+    out.shop_id = user.shop.shop_id if user.shop else None
+    return out
 
 
-@router.post("/register", response_model=UserOut, status_code=status.HTTP_201_CREATED)
-def register(payload: RegisterRequest, response: Response, db: Session = Depends(get_db)):
-    existing = db.query(User).filter(User.email == payload.email).first()
-    if existing:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
-
-    user = User(
-        email=payload.email,
-        password_hash=hash_password(payload.password),
-        full_name=payload.full_name,
-        role=payload.role,
-    )
-    db.add(user)
-    db.flush()
-
-    if payload.role == UserRole.business:
-        db.add(Business(user_id=user.id, business_name=payload.business_name))
-
-    db.commit()
-    db.refresh(user)
-    _set_auth_cookie(response, user)
-    return _to_user_out(user)
+def auth_out(user: User) -> AuthOut:
+    return AuthOut(token=create_token(user), user=user_out(user))
 
 
-@router.post("/login", response_model=UserOut)
-def login(payload: LoginRequest, response: Response, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == payload.email).first()
-    if user is None or not verify_password(payload.password, user.password_hash):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
-
-    _set_auth_cookie(response, user)
-    return _to_user_out(user)
+@router.post("/register", response_model=AuthOut, status_code=201)
+def register(body: RegisterIn, db: Session = Depends(get_db)):
+    """Create an account. Shop owners also get a shop (30% deposit, open Mon–Sat 10:00–19:00, Free plan)."""
+    user = accounts.register(db, **body.model_dump())
+    return auth_out(user)
 
 
-@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
-def logout(response: Response):
-    response.delete_cookie(COOKIE_NAME)
+@router.post("/login", response_model=AuthOut)
+def login(body: LoginIn, db: Session = Depends(get_db)):
+    user = accounts.authenticate(db, body.email, body.password)
+    return auth_out(user)
 
 
 @router.get("/me", response_model=UserOut)
 def me(user: User = Depends(get_current_user)):
-    return _to_user_out(user)
+    return user_out(user)
+
+
+@router.get("/demo-accounts", response_model=list[DemoAccountOut])
+def demo_accounts(db: Session = Depends(get_db)):
+    """Customers first, then shop owners, each A to Z."""
+    users = db.scalars(
+        select(User).where(User.demo.is_(True))
+        .order_by(case((User.role == "customer", 0), else_=1), User.full_name)
+    ).all()
+    result = []
+    for u in users:
+        item = DemoAccountOut(user_id=u.user_id, full_name=u.full_name, email=u.email, role=u.role)
+        if u.shop:
+            item.shop_name = u.shop.shop_name
+            item.plan_name = plan_of(db, u.shop.shop_id)[1].plan_name
+        result.append(item)
+    return result

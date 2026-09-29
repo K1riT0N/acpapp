@@ -4,5 +4,5 @@ sqlalchemy>=2.0
 psycopg[binary]>=3.1
 pydantic
 bcrypt
-email-validator
-python-jose[cryptography]
+PyJWT>=2.8
+tzdata

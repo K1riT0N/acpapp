@@ -10,6 +10,7 @@ services:
     working_dir: /src
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      WATCHPACK_POLLING: "true"   # makes hot reload notice file changes on Windows
     command: npm run dev
     depends_on:
       backend-api:
