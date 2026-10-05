@@ -1,4 +1,5 @@
 """Entry point of the Nadd API. Run by uvicorn as `app:app`."""
+import logging
 import os
 from contextlib import asynccontextmanager
 
@@ -14,21 +15,30 @@ import models  # noqa: F401  (importing it registers the 9 tables on Base, so cr
 from core.errors import RuleError
 from core.limits import ensure_plans
 from database import Base, SessionLocal, engine, get_db
+import scheduler
 from routes.auth import router as auth_router
+from routes.bookings import router as bookings_router
+from routes.notifications import router as notifications_router
 from routes.owner import router as owner_router
 from routes.plans import router as plans_router
 from routes.shops import router as shops_router
 
 FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
 
+# Show our own log lines (simulated LINE/email messages, background jobs) in `docker compose logs`
+logging.basicConfig(level=logging.INFO, format="%(levelname)s:     %(name)s: %(message)s")
+logging.getLogger("apscheduler").setLevel(logging.WARNING)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Runs once when the API starts: create missing tables and make sure the plans exist."""
+    """Runs when the API starts and stops: tables, plans, and the background jobs."""
     Base.metadata.create_all(bind=engine)
     with SessionLocal() as db:
         ensure_plans(db)
+    jobs = scheduler.start()
     yield
+    jobs.shutdown(wait=False)
 
 
 app = FastAPI(title="Nadd API", lifespan=lifespan)
@@ -60,7 +70,9 @@ def validation_error(request: Request, exc: RequestValidationError):
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(plans_router, prefix="/plans", tags=["public"])
 app.include_router(shops_router, prefix="/shops", tags=["public"])
+app.include_router(bookings_router, prefix="/bookings", tags=["customer"])
 app.include_router(owner_router, prefix="/owner", tags=["shop owner"])
+app.include_router(notifications_router, prefix="/notifications", tags=["messages"])
 
 
 @app.get("/")

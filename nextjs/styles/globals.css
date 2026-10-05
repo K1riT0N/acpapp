@@ -271,3 +271,8 @@ dl.kv .strong{font-weight:600;color:var(--ink)}
 .settings-grid input[type=time]{padding-left:8px;padding-right:6px}
 /* Login page: keep the demo accounts' "Log in" buttons on one line */
 .demo-row .btn{flex:0 0 auto;white-space:nowrap}
+/* Phones: the prototype's one-column layout (1fr) grows to fit the 14-day strip and the page scrolls sideways.
+   minmax(0,1fr) keeps the column at screen width, so the day strip scrolls inside it instead. */
+@media (max-width:860px){.grid-2{grid-template-columns:minmax(0,1fr)}}
+/* Messages page: keep the LINE / Email label its natural height instead of stretching down the row */
+.msg .ch{align-self:start}
