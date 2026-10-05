@@ -1,5 +1,8 @@
 fastapi[standard]
 uvicorn
-databases[asyncpg]
+sqlalchemy>=2.0
+psycopg[binary]>=3.1
 pydantic
 bcrypt
+PyJWT>=2.8
+tzdata

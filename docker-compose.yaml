@@ -8,22 +8,26 @@ services:
       - ./nextjs:/src
       - /src/node_modules
     working_dir: /src
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      WATCHPACK_POLLING: "true"
     command: npm run dev
     depends_on:
-      - backend-api
+      backend-api:
+        condition: service_healthy
 
   db:
-    image: postgres:13
+    image: postgres:16
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: temp
-      POSTGRES_PASSWORD: temp
-      POSTGRES_DB: advcompro
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - nadd_db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U temp -d advcompro"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -36,14 +40,24 @@ services:
     volumes:
       - ./backend-api:/src
     environment:
-      POSTGRES_USER: temp
-      POSTGRES_PASSWORD: temp
-      POSTGRES_DB: advcompro
-      POSTGRES_HOST: db
+      JWT_SECRET: ${JWT_SECRET}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN}
     command: uvicorn app:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
-  postgres_data:
+  # Postgres 16 cannot read the old Postgres 13 volume (postgres_data), so it uses a new one.
+  nadd_db_data:

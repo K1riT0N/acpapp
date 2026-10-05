@@ -1,0 +1,894 @@
+{
+ "_about": "Demo data for Nadd. Dates are anchored to 2026-09-23 as 'today'; seed.py shifts every date and timestamp by (today - 2026-09-23). Demo users log in with password demo1234 (hash it in seed.py).",
+ "anchor_date": "2026-09-23",
+ "plans": [
+  {
+   "plan_id": "free",
+   "plan_name": "Free",
+   "monthly_price": 0,
+   "booking_limit": 10
+  },
+  {
+   "plan_id": "pro",
+   "plan_name": "Pro",
+   "monthly_price": 299,
+   "booking_limit": null
+  }
+ ],
+ "users": [
+  {
+   "user_id": "u_ploy",
+   "full_name": "Ploy Srisuk",
+   "email": "ploy@demo.nadd",
+   "phone": "081 234 5678",
+   "role": "customer",
+   "line_user_id": "U-demo-ploy",
+   "demo": true,
+   "created_at": "2026-08-20T10:00:00+07:00"
+  },
+  {
+   "user_id": "u_ton",
+   "full_name": "Ton Kittisak",
+   "email": "ton@demo.nadd",
+   "phone": "089 876 5432",
+   "role": "customer",
+   "line_user_id": null,
+   "demo": true,
+   "created_at": "2026-08-22T18:30:00+07:00"
+  },
+  {
+   "user_id": "u_noi",
+   "full_name": "Noi Chaiyaporn",
+   "email": "noi@demo.nadd",
+   "phone": "086 555 0101",
+   "role": "shop_owner",
+   "line_user_id": "U-demo-noi",
+   "demo": true,
+   "created_at": "2026-08-01T09:00:00+07:00"
+  },
+  {
+   "user_id": "u_mek",
+   "full_name": "Mek Wattana",
+   "email": "mek@demo.nadd",
+   "phone": "086 555 0202",
+   "role": "shop_owner",
+   "line_user_id": "U-demo-mek",
+   "demo": true,
+   "created_at": "2026-08-05T09:00:00+07:00"
+  },
+  {
+   "user_id": "u_somjai",
+   "full_name": "Somjai Boonmee",
+   "email": "somjai@demo.nadd",
+   "phone": "086 555 0303",
+   "role": "shop_owner",
+   "line_user_id": "U-demo-somjai",
+   "demo": true,
+   "created_at": "2026-08-15T09:00:00+07:00"
+  }
+ ],
+ "shops": [
+  {
+   "shop_id": "shop_baansuay",
+   "owner_id": "u_noi",
+   "shop_name": "Baan Suay Hair Studio",
+   "category": "Hair salon",
+   "address": "Soi Ari 4, Phaya Thai, Bangkok",
+   "phone": "02 111 2233",
+   "description": "Cuts, colour and scalp treatments in a two-chair studio a short walk from BTS Ari.",
+   "deposit_percent": 30,
+   "created_at": "2026-08-01T09:05:00+07:00"
+  },
+  {
+   "shop_id": "shop_cleanride",
+   "owner_id": "u_mek",
+   "shop_name": "Clean Ride Car Care",
+   "category": "Car care",
+   "address": "Lat Phrao 71, Wang Thonglang, Bangkok",
+   "phone": "02 444 5566",
+   "description": "Hand wash, interior cleaning and ceramic coating. Three wash bays, so you rarely wait.",
+   "deposit_percent": 20,
+   "created_at": "2026-08-05T09:05:00+07:00"
+  },
+  {
+   "shop_id": "shop_somjai",
+   "owner_id": "u_somjai",
+   "shop_name": "Somjai Thai Massage",
+   "category": "Massage and spa",
+   "address": "Nimmanhaemin Soi 9, Chiang Mai",
+   "phone": "053 222 333",
+   "description": "Traditional Thai, foot and oil massage by therapists with more than ten years of practice.",
+   "deposit_percent": 25,
+   "created_at": "2026-08-15T09:05:00+07:00"
+  }
+ ],
+ "services": [
+  {
+   "service_id": "svc_bs_cut",
+   "shop_id": "shop_baansuay",
+   "service_name": "Haircut and blow-dry",
+   "price": 450,
+   "duration_min": 45,
+   "is_active": true
+  },
+  {
+   "service_id": "svc_bs_spa",
+   "shop_id": "shop_baansuay",
+   "service_name": "Hair spa treatment",
+   "price": 900,
+   "duration_min": 60,
+   "is_active": true
+  },
+  {
+   "service_id": "svc_bs_color",
+   "shop_id": "shop_baansuay",
+   "service_name": "Hair colouring",
+   "price": 1800,
+   "duration_min": 120,
+   "is_active": true
+  },
+  {
+   "service_id": "svc_cr_wash",
+   "shop_id": "shop_cleanride",
+   "service_name": "Exterior hand wash",
+   "price": 300,
+   "duration_min": 45,
+   "is_active": true
+  },
+  {
+   "service_id": "svc_cr_full",
+   "shop_id": "shop_cleanride",
+   "service_name": "Wash and interior vacuum",
+   "price": 550,
+   "duration_min": 60,
+   "is_active": true
+  },
+  {
+   "service_id": "svc_cr_ceramic",
+   "shop_id": "shop_cleanride",
+   "service_name": "Ceramic coating",
+   "price": 6500,
+   "duration_min": 240,
+   "is_active": true
+  },
+  {
+   "service_id": "svc_sj_foot",
+   "shop_id": "shop_somjai",
+   "service_name": "Foot massage, 45 min",
+   "price": 300,
+   "duration_min": 45,
+   "is_active": true
+  },
+  {
+   "service_id": "svc_sj_thai",
+   "shop_id": "shop_somjai",
+   "service_name": "Thai massage, 60 min",
+   "price": 400,
+   "duration_min": 60,
+   "is_active": true
+  },
+  {
+   "service_id": "svc_sj_oil",
+   "shop_id": "shop_somjai",
+   "service_name": "Oil massage, 90 min",
+   "price": 900,
+   "duration_min": 90,
+   "is_active": true
+  }
+ ],
+ "business_hours": [
+  {
+   "hours_id": "bh_bs_0",
+   "shop_id": "shop_baansuay",
+   "day_of_week": 0,
+   "open_time": "10:00",
+   "close_time": "19:00",
+   "max_per_slot": 2
+  },
+  {
+   "hours_id": "bh_bs_2",
+   "shop_id": "shop_baansuay",
+   "day_of_week": 2,
+   "open_time": "10:00",
+   "close_time": "19:00",
+   "max_per_slot": 2
+  },
+  {
+   "hours_id": "bh_bs_3",
+   "shop_id": "shop_baansuay",
+   "day_of_week": 3,
+   "open_time": "10:00",
+   "close_time": "19:00",
+   "max_per_slot": 2
+  },
+  {
+   "hours_id": "bh_bs_4",
+   "shop_id": "shop_baansuay",
+   "day_of_week": 4,
+   "open_time": "10:00",
+   "close_time": "19:00",
+   "max_per_slot": 2
+  },
+  {
+   "hours_id": "bh_bs_5",
+   "shop_id": "shop_baansuay",
+   "day_of_week": 5,
+   "open_time": "10:00",
+   "close_time": "19:00",
+   "max_per_slot": 2
+  },
+  {
+   "hours_id": "bh_bs_6",
+   "shop_id": "shop_baansuay",
+   "day_of_week": 6,
+   "open_time": "10:00",
+   "close_time": "19:00",
+   "max_per_slot": 2
+  },
+  {
+   "hours_id": "bh_cr_1",
+   "shop_id": "shop_cleanride",
+   "day_of_week": 1,
+   "open_time": "08:00",
+   "close_time": "18:00",
+   "max_per_slot": 3
+  },
+  {
+   "hours_id": "bh_cr_2",
+   "shop_id": "shop_cleanride",
+   "day_of_week": 2,
+   "open_time": "08:00",
+   "close_time": "18:00",
+   "max_per_slot": 3
+  },
+  {
+   "hours_id": "bh_cr_3",
+   "shop_id": "shop_cleanride",
+   "day_of_week": 3,
+   "open_time": "08:00",
+   "close_time": "18:00",
+   "max_per_slot": 3
+  },
+  {
+   "hours_id": "bh_cr_4",
+   "shop_id": "shop_cleanride",
+   "day_of_week": 4,
+   "open_time": "08:00",
+   "close_time": "18:00",
+   "max_per_slot": 3
+  },
+  {
+   "hours_id": "bh_cr_5",
+   "shop_id": "shop_cleanride",
+   "day_of_week": 5,
+   "open_time": "08:00",
+   "close_time": "18:00",
+   "max_per_slot": 3
+  },
+  {
+   "hours_id": "bh_cr_6",
+   "shop_id": "shop_cleanride",
+   "day_of_week": 6,
+   "open_time": "08:00",
+   "close_time": "18:00",
+   "max_per_slot": 3
+  },
+  {
+   "hours_id": "bh_sj_0",
+   "shop_id": "shop_somjai",
+   "day_of_week": 0,
+   "open_time": "11:00",
+   "close_time": "21:00",
+   "max_per_slot": 3
+  },
+  {
+   "hours_id": "bh_sj_1",
+   "shop_id": "shop_somjai",
+   "day_of_week": 1,
+   "open_time": "11:00",
+   "close_time": "21:00",
+   "max_per_slot": 3
+  },
+  {
+   "hours_id": "bh_sj_2",
+   "shop_id": "shop_somjai",
+   "day_of_week": 2,
+   "open_time": "11:00",
+   "close_time": "21:00",
+   "max_per_slot": 3
+  },
+  {
+   "hours_id": "bh_sj_4",
+   "shop_id": "shop_somjai",
+   "day_of_week": 4,
+   "open_time": "11:00",
+   "close_time": "21:00",
+   "max_per_slot": 3
+  },
+  {
+   "hours_id": "bh_sj_5",
+   "shop_id": "shop_somjai",
+   "day_of_week": 5,
+   "open_time": "11:00",
+   "close_time": "21:00",
+   "max_per_slot": 3
+  },
+  {
+   "hours_id": "bh_sj_6",
+   "shop_id": "shop_somjai",
+   "day_of_week": 6,
+   "open_time": "11:00",
+   "close_time": "21:00",
+   "max_per_slot": 3
+  }
+ ],
+ "subscriptions": [
+  {
+   "subscription_id": "sub_bs_free",
+   "shop_id": "shop_baansuay",
+   "plan_id": "free",
+   "start_date": "2026-08-01",
+   "end_date": null,
+   "status": "active"
+  },
+  {
+   "subscription_id": "sub_cr_free",
+   "shop_id": "shop_cleanride",
+   "plan_id": "free",
+   "start_date": "2026-08-05",
+   "end_date": "2026-09-10",
+   "status": "ended"
+  },
+  {
+   "subscription_id": "sub_cr_pro",
+   "shop_id": "shop_cleanride",
+   "plan_id": "pro",
+   "start_date": "2026-09-10",
+   "end_date": "2026-10-10",
+   "status": "active"
+  },
+  {
+   "subscription_id": "sub_sj_free",
+   "shop_id": "shop_somjai",
+   "plan_id": "free",
+   "start_date": "2026-08-15",
+   "end_date": null,
+   "status": "active"
+  }
+ ],
+ "bookings": [
+  {
+   "booking_id": "b01",
+   "ref": "K7Q2M",
+   "customer_id": "u_ploy",
+   "shop_id": "shop_baansuay",
+   "service_id": "svc_bs_cut",
+   "booking_date": "2026-09-05",
+   "start_time": "11:00",
+   "end_time": "11:45",
+   "status": "completed",
+   "total_price": 450,
+   "deposit_amount": 135,
+   "remaining_amount": 315,
+   "hold_expires_at": "2026-09-02T09:27:00+07:00",
+   "policy_accepted_at": "2026-09-02T09:15:00+07:00",
+   "created_at": "2026-09-02T09:12:00+07:00",
+   "cancelled_at": null
+  },
+  {
+   "booking_id": "b02",
+   "ref": "P4XW8",
+   "customer_id": "u_ton",
+   "shop_id": "shop_baansuay",
+   "service_id": "svc_bs_color",
+   "booking_date": "2026-09-09",
+   "start_time": "13:00",
+   "end_time": "15:00",
+   "status": "completed",
+   "total_price": 1800,
+   "deposit_amount": 540,
+   "remaining_amount": 1260,
+   "hold_expires_at": "2026-09-06T20:25:00+07:00",
+   "policy_accepted_at": "2026-09-06T20:13:00+07:00",
+   "created_at": "2026-09-06T20:10:00+07:00",
+   "cancelled_at": null
+  },
+  {
+   "booking_id": "b03",
+   "ref": "H3ND6",
+   "customer_id": "u_ploy",
+   "shop_id": "shop_baansuay",
+   "service_id": "svc_bs_spa",
+   "booking_date": "2026-09-12",
+   "start_time": "15:00",
+   "end_time": "16:00",
+   "status": "no_show",
+   "total_price": 900,
+   "deposit_amount": 270,
+   "remaining_amount": 630,
+   "hold_expires_at": "2026-09-10T12:55:00+07:00",
+   "policy_accepted_at": "2026-09-10T12:43:00+07:00",
+   "created_at": "2026-09-10T12:40:00+07:00",
+   "cancelled_at": null
+  },
+  {
+   "booking_id": "b04",
+   "ref": "T9BF5",
+   "customer_id": "u_ton",
+   "shop_id": "shop_baansuay",
+   "service_id": "svc_bs_cut",
+   "booking_date": "2026-09-16",
+   "start_time": "10:30",
+   "end_time": "11:15",
+   "status": "cancelled",
+   "total_price": 450,
+   "deposit_amount": 135,
+   "remaining_amount": 315,
+   "hold_expires_at": "2026-09-11T08:40:00+07:00",
+   "policy_accepted_at": "2026-09-11T08:28:00+07:00",
+   "created_at": "2026-09-11T08:25:00+07:00",
+   "cancelled_at": "2026-09-15T20:05:00+07:00"
+  },
+  {
+   "booking_id": "b05",
+   "ref": "M2RC7",
+   "customer_id": "u_ploy",
+   "shop_id": "shop_baansuay",
+   "service_id": "svc_bs_color",
+   "booking_date": "2026-09-20",
+   "start_time": "14:00",
+   "end_time": "16:00",
+   "status": "completed",
+   "total_price": 1800,
+   "deposit_amount": 540,
+   "remaining_amount": 1260,
+   "hold_expires_at": "2026-09-14T19:17:00+07:00",
+   "policy_accepted_at": "2026-09-14T19:05:00+07:00",
+   "created_at": "2026-09-14T19:02:00+07:00",
+   "cancelled_at": null
+  },
+  {
+   "booking_id": "b06",
+   "ref": "W8LE3",
+   "customer_id": "u_ton",
+   "shop_id": "shop_baansuay",
+   "service_id": "svc_bs_cut",
+   "booking_date": "2026-09-23",
+   "start_time": "16:00",
+   "end_time": "16:45",
+   "status": "confirmed",
+   "total_price": 450,
+   "deposit_amount": 135,
+   "remaining_amount": 315,
+   "hold_expires_at": "2026-09-19T14:15:00+07:00",
+   "policy_accepted_at": "2026-09-19T14:03:00+07:00",
+   "created_at": "2026-09-19T14:00:00+07:00",
+   "cancelled_at": null
+  },
+  {
+   "booking_id": "b07",
+   "ref": "Z5GA9",
+   "customer_id": "u_ploy",
+   "shop_id": "shop_baansuay",
+   "service_id": "svc_bs_spa",
+   "booking_date": "2026-09-23",
+   "start_time": "17:30",
+   "end_time": "18:30",
+   "status": "confirmed",
+   "total_price": 900,
+   "deposit_amount": 270,
+   "remaining_amount": 630,
+   "hold_expires_at": "2026-09-21T11:30:00+07:00",
+   "policy_accepted_at": "2026-09-21T11:18:00+07:00",
+   "created_at": "2026-09-21T11:15:00+07:00",
+   "cancelled_at": null
+  },
+  {
+   "booking_id": "b08",
+   "ref": "C6VJ2",
+   "customer_id": "u_ton",
+   "shop_id": "shop_baansuay",
+   "service_id": "svc_bs_color",
+   "booking_date": "2026-09-25",
+   "start_time": "11:00",
+   "end_time": "13:00",
+   "status": "confirmed",
+   "total_price": 1800,
+   "deposit_amount": 540,
+   "remaining_amount": 1260,
+   "hold_expires_at": "2026-09-22T19:55:00+07:00",
+   "policy_accepted_at": "2026-09-22T19:43:00+07:00",
+   "created_at": "2026-09-22T19:40:00+07:00",
+   "cancelled_at": null
+  },
+  {
+   "booking_id": "b09",
+   "ref": "R2KD8",
+   "customer_id": "u_ploy",
+   "shop_id": "shop_cleanride",
+   "service_id": "svc_cr_full",
+   "booking_date": "2026-09-24",
+   "start_time": "09:00",
+   "end_time": "10:00",
+   "status": "confirmed",
+   "total_price": 550,
+   "deposit_amount": 110,
+   "remaining_amount": 440,
+   "hold_expires_at": "2026-09-22T12:15:00+07:00",
+   "policy_accepted_at": "2026-09-22T12:03:00+07:00",
+   "created_at": "2026-09-22T12:00:00+07:00",
+   "cancelled_at": null
+  },
+  {
+   "booking_id": "b10",
+   "ref": "F7NB4",
+   "customer_id": "u_ton",
+   "shop_id": "shop_somjai",
+   "service_id": "svc_sj_thai",
+   "booking_date": "2026-09-26",
+   "start_time": "18:00",
+   "end_time": "19:00",
+   "status": "confirmed",
+   "total_price": 400,
+   "deposit_amount": 100,
+   "remaining_amount": 300,
+   "hold_expires_at": "2026-09-23T08:45:00+07:00",
+   "policy_accepted_at": "2026-09-23T08:33:00+07:00",
+   "created_at": "2026-09-23T08:30:00+07:00",
+   "cancelled_at": null
+  }
+ ],
+ "payments": [
+  {
+   "payment_id": "p_b01_dep",
+   "booking_id": "b01",
+   "subscription_id": null,
+   "payment_type": "deposit",
+   "amount": 135,
+   "method": "promptpay",
+   "status": "paid",
+   "gateway_ref": "TEST-K7Q2MD",
+   "paid_at": "2026-09-02T09:15:00+07:00"
+  },
+  {
+   "payment_id": "p_b01_rem",
+   "booking_id": "b01",
+   "subscription_id": null,
+   "payment_type": "remaining",
+   "amount": 315,
+   "method": "cash",
+   "status": "paid",
+   "gateway_ref": null,
+   "paid_at": "2026-09-05T11:50:00+07:00"
+  },
+  {
+   "payment_id": "p_b02_dep",
+   "booking_id": "b02",
+   "subscription_id": null,
+   "payment_type": "deposit",
+   "amount": 540,
+   "method": "promptpay",
+   "status": "paid",
+   "gateway_ref": "TEST-P4XW8D",
+   "paid_at": "2026-09-06T20:13:00+07:00"
+  },
+  {
+   "payment_id": "p_b02_rem",
+   "booking_id": "b02",
+   "subscription_id": null,
+   "payment_type": "remaining",
+   "amount": 1260,
+   "method": "promptpay",
+   "status": "paid",
+   "gateway_ref": "TEST-P4XW8R",
+   "paid_at": "2026-09-09T15:05:00+07:00"
+  },
+  {
+   "payment_id": "p_b03_dep",
+   "booking_id": "b03",
+   "subscription_id": null,
+   "payment_type": "deposit",
+   "amount": 270,
+   "method": "promptpay",
+   "status": "paid",
+   "gateway_ref": "TEST-H3ND6D",
+   "paid_at": "2026-09-10T12:43:00+07:00"
+  },
+  {
+   "payment_id": "p_b04_dep",
+   "booking_id": "b04",
+   "subscription_id": null,
+   "payment_type": "deposit",
+   "amount": 135,
+   "method": "promptpay",
+   "status": "paid",
+   "gateway_ref": "TEST-T9BF5D",
+   "paid_at": "2026-09-11T08:28:00+07:00"
+  },
+  {
+   "payment_id": "p_b05_dep",
+   "booking_id": "b05",
+   "subscription_id": null,
+   "payment_type": "deposit",
+   "amount": 540,
+   "method": "promptpay",
+   "status": "paid",
+   "gateway_ref": "TEST-M2RC7D",
+   "paid_at": "2026-09-14T19:05:00+07:00"
+  },
+  {
+   "payment_id": "p_b05_rem",
+   "booking_id": "b05",
+   "subscription_id": null,
+   "payment_type": "remaining",
+   "amount": 1260,
+   "method": "card",
+   "status": "paid",
+   "gateway_ref": "TEST-M2RC7R",
+   "paid_at": "2026-09-20T16:10:00+07:00"
+  },
+  {
+   "payment_id": "p_b06_dep",
+   "booking_id": "b06",
+   "subscription_id": null,
+   "payment_type": "deposit",
+   "amount": 135,
+   "method": "promptpay",
+   "status": "paid",
+   "gateway_ref": "TEST-W8LE3D",
+   "paid_at": "2026-09-19T14:03:00+07:00"
+  },
+  {
+   "payment_id": "p_b07_dep",
+   "booking_id": "b07",
+   "subscription_id": null,
+   "payment_type": "deposit",
+   "amount": 270,
+   "method": "promptpay",
+   "status": "paid",
+   "gateway_ref": "TEST-Z5GA9D",
+   "paid_at": "2026-09-21T11:18:00+07:00"
+  },
+  {
+   "payment_id": "p_b08_dep",
+   "booking_id": "b08",
+   "subscription_id": null,
+   "payment_type": "deposit",
+   "amount": 540,
+   "method": "promptpay",
+   "status": "paid",
+   "gateway_ref": "TEST-C6VJ2D",
+   "paid_at": "2026-09-22T19:43:00+07:00"
+  },
+  {
+   "payment_id": "p_b09_dep",
+   "booking_id": "b09",
+   "subscription_id": null,
+   "payment_type": "deposit",
+   "amount": 110,
+   "method": "promptpay",
+   "status": "paid",
+   "gateway_ref": "TEST-R2KD8D",
+   "paid_at": "2026-09-22T12:03:00+07:00"
+  },
+  {
+   "payment_id": "p_b10_dep",
+   "booking_id": "b10",
+   "subscription_id": null,
+   "payment_type": "deposit",
+   "amount": 100,
+   "method": "promptpay",
+   "status": "paid",
+   "gateway_ref": "TEST-F7NB4D",
+   "paid_at": "2026-09-23T08:33:00+07:00"
+  },
+  {
+   "payment_id": "p_sub_cr_pro",
+   "booking_id": null,
+   "subscription_id": "sub_cr_pro",
+   "payment_type": "subscription",
+   "amount": 299,
+   "method": "promptpay",
+   "status": "paid",
+   "gateway_ref": "TEST-PRO0910",
+   "paid_at": "2026-09-10T10:00:00+07:00"
+  }
+ ],
+ "notifications": [
+  {
+   "notification_id": "n01",
+   "booking_id": "b06",
+   "recipient_id": "u_noi",
+   "type": "new_booking",
+   "channel": "line",
+   "title": "New booking: Haircut and blow-dry",
+   "body": "Ton Kittisak booked Haircut and blow-dry on Wed 23 Sep at 16:00. Deposit ฿135 received.",
+   "scheduled_at": "2026-09-19T14:03:00+07:00",
+   "sent_at": "2026-09-19T14:03:00+07:00",
+   "status": "sent",
+   "read": true
+  },
+  {
+   "notification_id": "n02",
+   "booking_id": "b07",
+   "recipient_id": "u_noi",
+   "type": "new_booking",
+   "channel": "line",
+   "title": "New booking: Hair spa treatment",
+   "body": "Ploy Srisuk booked Hair spa treatment on Wed 23 Sep at 17:30. Deposit ฿270 received.",
+   "scheduled_at": "2026-09-21T11:18:00+07:00",
+   "sent_at": "2026-09-21T11:18:00+07:00",
+   "status": "sent",
+   "read": true
+  },
+  {
+   "notification_id": "n03",
+   "booking_id": "b08",
+   "recipient_id": "u_noi",
+   "type": "new_booking",
+   "channel": "line",
+   "title": "New booking: Hair colouring",
+   "body": "Ton Kittisak booked Hair colouring on Fri 25 Sep at 11:00. Deposit ฿540 received.",
+   "scheduled_at": "2026-09-22T19:43:00+07:00",
+   "sent_at": "2026-09-22T19:43:00+07:00",
+   "status": "sent",
+   "read": false
+  },
+  {
+   "notification_id": "n04",
+   "booking_id": "b08",
+   "recipient_id": "u_ton",
+   "type": "booking_confirmed",
+   "channel": "email",
+   "title": "Booking confirmed at Baan Suay Hair Studio",
+   "body": "Hair colouring on Fri 25 Sep at 11:00. Ref C6VJ2. Pay ฿1,260 at the shop.",
+   "scheduled_at": "2026-09-22T19:43:00+07:00",
+   "sent_at": "2026-09-22T19:43:00+07:00",
+   "status": "sent",
+   "read": false
+  },
+  {
+   "notification_id": "n05",
+   "booking_id": "b09",
+   "recipient_id": "u_mek",
+   "type": "new_booking",
+   "channel": "line",
+   "title": "New booking: Wash and interior vacuum",
+   "body": "Ploy Srisuk booked Wash and interior vacuum on Thu 24 Sep at 09:00. Deposit ฿110 received.",
+   "scheduled_at": "2026-09-22T12:03:00+07:00",
+   "sent_at": "2026-09-22T12:03:00+07:00",
+   "status": "sent",
+   "read": false
+  },
+  {
+   "notification_id": "n06",
+   "booking_id": "b09",
+   "recipient_id": "u_ploy",
+   "type": "booking_confirmed",
+   "channel": "line",
+   "title": "Booking confirmed at Clean Ride Car Care",
+   "body": "Wash and interior vacuum on Thu 24 Sep at 09:00. Ref R2KD8. Pay ฿440 at the shop.",
+   "scheduled_at": "2026-09-22T12:03:00+07:00",
+   "sent_at": "2026-09-22T12:03:00+07:00",
+   "status": "sent",
+   "read": false
+  },
+  {
+   "notification_id": "n07",
+   "booking_id": "b10",
+   "recipient_id": "u_somjai",
+   "type": "new_booking",
+   "channel": "line",
+   "title": "New booking: Thai massage, 60 min",
+   "body": "Ton Kittisak booked Thai massage, 60 min on Sat 26 Sep at 18:00. Deposit ฿100 received.",
+   "scheduled_at": "2026-09-23T08:33:00+07:00",
+   "sent_at": "2026-09-23T08:33:00+07:00",
+   "status": "sent",
+   "read": false
+  },
+  {
+   "notification_id": "n08",
+   "booking_id": "b10",
+   "recipient_id": "u_ton",
+   "type": "booking_confirmed",
+   "channel": "email",
+   "title": "Booking confirmed at Somjai Thai Massage",
+   "body": "Thai massage, 60 min on Sat 26 Sep at 18:00. Ref F7NB4. Pay ฿300 at the shop.",
+   "scheduled_at": "2026-09-23T08:33:00+07:00",
+   "sent_at": "2026-09-23T08:33:00+07:00",
+   "status": "sent",
+   "read": false
+  },
+  {
+   "notification_id": "n09",
+   "booking_id": "b06",
+   "recipient_id": "u_ton",
+   "type": "reminder",
+   "channel": "email",
+   "title": "Starting in 2 hours at Baan Suay Hair Studio",
+   "body": "Haircut and blow-dry on Wed 23 Sep at 16:00. Ref W8LE3.",
+   "scheduled_at": "2026-09-23T14:00:00+07:00",
+   "sent_at": null,
+   "status": "pending",
+   "read": false
+  },
+  {
+   "notification_id": "n10",
+   "booking_id": "b07",
+   "recipient_id": "u_ploy",
+   "type": "reminder",
+   "channel": "line",
+   "title": "Starting in 2 hours at Baan Suay Hair Studio",
+   "body": "Hair spa treatment on Wed 23 Sep at 17:30. Ref Z5GA9.",
+   "scheduled_at": "2026-09-23T15:30:00+07:00",
+   "sent_at": null,
+   "status": "pending",
+   "read": false
+  },
+  {
+   "notification_id": "n11",
+   "booking_id": "b08",
+   "recipient_id": "u_ton",
+   "type": "reminder",
+   "channel": "email",
+   "title": "Reminder: your appointment at Baan Suay Hair Studio",
+   "body": "Hair colouring on Fri 25 Sep at 11:00. Ref C6VJ2.",
+   "scheduled_at": "2026-09-24T11:00:00+07:00",
+   "sent_at": null,
+   "status": "pending",
+   "read": false
+  },
+  {
+   "notification_id": "n12",
+   "booking_id": "b08",
+   "recipient_id": "u_noi",
+   "type": "reminder",
+   "channel": "line",
+   "title": "Upcoming: Ton Kittisak at 11:00",
+   "body": "Hair colouring on Fri 25 Sep at 11:00.",
+   "scheduled_at": "2026-09-24T11:00:00+07:00",
+   "sent_at": null,
+   "status": "pending",
+   "read": false
+  },
+  {
+   "notification_id": "n13",
+   "booking_id": "b09",
+   "recipient_id": "u_ploy",
+   "type": "reminder",
+   "channel": "line",
+   "title": "Reminder: your appointment at Clean Ride Car Care",
+   "body": "Wash and interior vacuum on Thu 24 Sep at 09:00. Ref R2KD8.",
+   "scheduled_at": "2026-09-23T09:00:00+07:00",
+   "sent_at": null,
+   "status": "pending",
+   "read": false
+  },
+  {
+   "notification_id": "n14",
+   "booking_id": "b09",
+   "recipient_id": "u_mek",
+   "type": "reminder",
+   "channel": "line",
+   "title": "Upcoming: Ploy Srisuk at 09:00",
+   "body": "Wash and interior vacuum on Thu 24 Sep at 09:00.",
+   "scheduled_at": "2026-09-23T09:00:00+07:00",
+   "sent_at": null,
+   "status": "pending",
+   "read": false
+  },
+  {
+   "notification_id": "n15",
+   "booking_id": "b10",
+   "recipient_id": "u_ton",
+   "type": "reminder",
+   "channel": "email",
+   "title": "Reminder: your appointment at Somjai Thai Massage",
+   "body": "Thai massage, 60 min on Sat 26 Sep at 18:00. Ref F7NB4.",
+   "scheduled_at": "2026-09-25T18:00:00+07:00",
+   "sent_at": null,
+   "status": "pending",
+   "read": false
+  }
+ ]
+}

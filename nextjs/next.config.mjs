@@ -1,17 +1,8 @@
 /** @type {import('next').NextConfig} */
 
-const API_URL = "http://backend-api:8000";
-
+// The browser calls the API directly at NEXT_PUBLIC_API_URL (http://localhost:8000), so no proxy is needed.
 const nextConfig = {
   reactStrictMode: true,
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${API_URL}/api/:path*`,
-      },
-    ];
-  },
 };
 
 export default nextConfig;

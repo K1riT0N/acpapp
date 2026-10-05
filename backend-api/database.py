@@ -1,61 +1,31 @@
+"""Database connection shared by the whole API.
+
+models.py imports `Base` to define the tables, and routes use `get_db`
+to get a session for one request.
+"""
 import os
 
-import bcrypt
-from databases import Database
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-POSTGRES_USER = os.getenv("POSTGRES_USER", "temp")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "temp")
-POSTGRES_DB = os.getenv("POSTGRES_DB", "advcompro")
-POSTGRES_HOST = os.getenv("POSTGRES_HOST", "db")
-
-DATABASE_URL = (
-    f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-    f"@{POSTGRES_HOST}/{POSTGRES_DB}"
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql+psycopg://nadd:change-me@localhost:5432/nadd",  # used only when running outside Docker
 )
 
-database = Database(DATABASE_URL)
+# pool_pre_ping checks a connection is still alive before using it
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
 
 
-async def connect_db():
-    await database.connect()
+class Base(DeclarativeBase):
+    """Parent class for every table in models.py."""
 
 
-async def disconnect_db():
-    await database.disconnect()
-
-
-async def setup_db():
-    await database.execute(
-        """
-        CREATE TABLE IF NOT EXISTS users (
-            email VARCHAR(255) PRIMARY KEY,
-            password TEXT NOT NULL,
-            token TEXT,
-            create_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        )
-        """
-    )
-
-    demo_password = bcrypt.hashpw(b"password", bcrypt.gensalt()).decode("utf-8")
-    await database.execute(
-        """
-        INSERT INTO users (email, password)
-        VALUES (:email, :password)
-        ON CONFLICT (email) DO NOTHING
-        """,
-        {"email": "demo@example.com", "password": demo_password},
-    )
-
-
-async def get_user_by_email(email: str):
-    return await database.fetch_one(
-        "SELECT email, password, token, create_at FROM users WHERE email = :email",
-        {"email": email},
-    )
-
-
-async def update_user_token(email: str, token: str):
-    await database.execute(
-        "UPDATE users SET token = :token WHERE email = :email",
-        {"email": email, "token": token},
-    )
+def get_db():
+    """FastAPI dependency: opens a session for one request, then closes it."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
