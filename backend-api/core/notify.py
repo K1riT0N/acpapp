@@ -132,3 +132,23 @@ def mark_all_read(db: Session, user: User) -> int:
         n.read = True
     db.commit()
     return len(unread)
+
+
+def on_cancelled(db: Session, b: Booking) -> None:
+    """The customer cancelled: tell the shop the time is free again, and confirm to the customer."""
+    owner, customer = b.shop.owner, b.customer
+    svc, deposit = b.service.service_name, timeutil.baht(b.deposit_amount)
+    create(db, owner, b.booking_id, "cancellation", f"Cancelled: {customer.full_name} at {b.start_time:%H:%M}",
+           f"{svc} on {when(b)} was cancelled. The {deposit} deposit is kept, and the time is free again.")
+    create(db, customer, b.booking_id, "cancellation", f"Booking cancelled at {b.shop.shop_name}",
+           f"{svc} on {when(b)}. The {deposit} deposit is not refunded.")
+
+
+def on_no_show(db: Session, b: Booking) -> None:
+    create(db, b.customer, b.booking_id, "no_show", f"Missed appointment at {b.shop.shop_name}",
+           f"{b.service.service_name} on {when(b)} was marked as a no-show. "
+           f"The {timeutil.baht(b.deposit_amount)} deposit is kept by the shop.")
+
+
+def on_pro_started(db: Session, owner: User, end) -> None:
+    create(db, owner, None, "plan", "Pro plan is active", f"Bookings are unlimited until {timeutil.fmt_date(end)}.")

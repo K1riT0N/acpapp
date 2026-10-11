@@ -1,13 +1,17 @@
 // One booking, for its customer or the shop's owner (prototype: vBooking).
-// Step 9 adds the customer's Cancel button and the owner's Mark completed / No-show buttons.
+// The customer can cancel a confirmed booking before it starts; the owner can mark it completed or a no-show.
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
+import OwnerActions from "@/components/OwnerActions";
 import RequireRole from "@/components/RequireRole";
 import { Loading, NotFound } from "@/components/States";
 import Ticket, { MsgLine } from "@/components/Ticket";
-import { useApi } from "@/lib/api";
-import { baht, fmtDateLong, fmtDT, METHOD } from "@/lib/format";
+import { useToast } from "@/components/Toasts";
+import { api, useApi } from "@/lib/api";
+import { baht, fmtDateLong, fmtDT, METHOD, startsInFuture } from "@/lib/format";
+import { useMessages } from "@/lib/messages";
 
 function messageWhen(n) {
   if (n.status === "sent") return "Sent " + fmtDT(n.sent_at);
@@ -18,7 +22,11 @@ function messageWhen(n) {
 function BookingView() {
   const router = useRouter();
   const id = router.query.id;
-  const { data, error } = useApi(id ? `/bookings/${encodeURIComponent(id)}` : null);
+  const toast = useToast();
+  const { reload: reloadMessages } = useMessages();
+  const { data, error, setData } = useApi(id ? `/bookings/${encodeURIComponent(id)}` : null);
+  const [confirmCancel, setConfirmCancel] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   if (error) return <NotFound message={error.status === 404 ? error.message : "We couldn't find that booking."} />;
   if (!data) return <Loading />;
@@ -26,11 +34,43 @@ function BookingView() {
   const { booking: b, shop, viewer, payments, notifications } = data;
   const isOwner = viewer === "owner";
 
+  // After a change, read the booking again (status, payments and messages all change)
+  const refresh = () => api(`/bookings/${b.booking_id}`).then(setData).then(reloadMessages).catch(() => {});
+
+  async function cancel() {
+    setBusy(true);
+    try {
+      setData(await api(`/bookings/${b.booking_id}/cancel`, { method: "POST" }));
+      setConfirmCancel(false);
+      toast("Booking cancelled.");
+      reloadMessages();
+    } catch (e) {
+      toast(e.message);
+    }
+    setBusy(false);
+  }
+
   let actions = null;
-  if (!isOwner && b.status === "pending_payment" && b.hold_active) {
+  if (isOwner) {
+    actions = <OwnerActions b={b} onDone={refresh} />;
+  } else if (b.status === "pending_payment" && b.hold_active) {
     actions = (
       <div className="t-actions">
         <Link className="btn primary small" href={`/pay/${b.booking_id}`}>Pay deposit</Link>
+      </div>
+    );
+  } else if (b.status === "confirmed" && startsInFuture(b)) {
+    actions = confirmCancel ? (
+      <div className="warnbox mt-s">
+        <p>Cancel this booking? The {baht(b.deposit_amount)} deposit won&apos;t be refunded.</p>
+        <div className="row">
+          <button className="btn danger small" disabled={busy} onClick={cancel}>Cancel booking</button>
+          <button className="btn small" onClick={() => setConfirmCancel(false)}>Keep booking</button>
+        </div>
+      </div>
+    ) : (
+      <div className="t-actions">
+        <button className="btn danger small" onClick={() => setConfirmCancel(true)}>Cancel booking</button>
       </div>
     );
   }

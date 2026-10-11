@@ -96,3 +96,6 @@ export const chName = (c) => (c === "line" ? "LINE" : "Email");
 
 // Milliseconds from now until an ISO timestamp (negative when it's in the past)
 export const msUntil = (iso) => Date.parse(iso) - Date.now();
+
+// Has this booking's start time (Bangkok) not come yet?
+export const startsInFuture = (b) => Date.parse(`${b.booking_date}T${b.start_time}:00+07:00`) > Date.now();

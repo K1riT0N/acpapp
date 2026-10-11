@@ -49,7 +49,8 @@ export async function api(path, { method = "GET", body } = {}) {
 
 // Load data for a page: const { data, error, reload } = useApi("/shops/abc").
 // Pass null as the path to wait (for example until the user is known).
-export function useApi(path) {
+// keepPrevious: when the path changes, keep showing the old data until the new data arrives (no "Loading…" flash).
+export function useApi(path, { keepPrevious = false } = {}) {
   const [state, setState] = useState({ data: null, error: null, loading: !!path });
 
   const load = useCallback(() => {
@@ -60,9 +61,17 @@ export function useApi(path) {
   }, [path]);
 
   useEffect(() => {
-    setState({ data: null, error: null, loading: !!path });
+    setState((s) => ({ data: keepPrevious ? s.data : null, error: null, loading: !!path }));
     load();
-  }, [load, path]);
+  }, [load, path, keepPrevious]);
 
   return { ...state, reload: load, setData: (data) => setState((s) => ({ ...s, data })) };
+}
+
+// Run `fn` every `ms` milliseconds while the page is open ("live" updates for owner pages and messages)
+export function usePoll(fn, ms = 15000) {
+  useEffect(() => {
+    const t = setInterval(fn, ms);
+    return () => clearInterval(t);
+  }, [fn, ms]);
 }

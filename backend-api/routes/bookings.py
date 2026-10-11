@@ -1,7 +1,4 @@
-"""/bookings: making a booking, paying the deposit (test mode) and viewing a booking.
-
-(Step 9 adds /bookings/me and cancelling.)
-"""
+"""/bookings: the customer's side. Make a booking, pay the deposit (test mode), view, release or cancel it."""
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -50,6 +47,12 @@ def create(body: BookingIn, user: User = Depends(customer_only), db: Session = D
     return booking_out(b)
 
 
+@router.get("/me", response_model=list[BookingOut])
+def my_bookings(user: User = Depends(customer_only), db: Session = Depends(get_db)):
+    """All of the customer's bookings except expired holds, soonest first."""
+    return [booking_out(b) for b in booking_rules.for_customer(db, user)]
+
+
 @router.get("/{booking_id}", response_model=BookingDetailOut)
 def get(booking_id: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """For the booking's customer or the shop's owner only."""
@@ -70,3 +73,11 @@ def release(booking_id: str, user: User = Depends(customer_only), db: Session = 
     """The customer gives the held time back before paying."""
     b = booking_rules.get_customers_booking(db, booking_id, user)
     return booking_out(booking_rules.release_hold(db, b))
+
+
+@router.post("/{booking_id}/cancel", response_model=BookingDetailOut)
+def cancel(booking_id: str, user: User = Depends(customer_only), db: Session = Depends(get_db)):
+    """Only confirmed bookings that haven't started. The deposit is not refunded."""
+    b = booking_rules.get_customers_booking(db, booking_id, user)
+    b = booking_rules.cancel_by_customer(db, b.booking_id)
+    return detail_out(db, b, "customer", user)

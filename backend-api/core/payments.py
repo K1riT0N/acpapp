@@ -49,3 +49,21 @@ def pay_deposit_test(db: Session, b: Booking, policy_accepted: bool) -> Booking:
         raise RuleError("Tick the deposit policy first.")
     # The customer agreed to the no-refund policy just now; keep that moment as proof
     return confirm_deposit(db, b.booking_id, test_gateway_ref(), policy_accepted_at=timeutil.now())
+
+
+def record_remaining(db: Session, b: Booking, method: str) -> Payment:
+    """The customer paid the rest at the shop. Cash has no gateway reference."""
+    p = Payment(payment_id=new_id("pay"), booking_id=b.booking_id, subscription_id=None, payment_type="remaining",
+                amount=b.remaining_amount, method=method, status="paid",
+                gateway_ref=None if method == "cash" else test_gateway_ref(), paid_at=timeutil.now())
+    db.add(p)
+    return p
+
+
+def pay_subscription_test(db: Session, subscription_id: str, amount: int) -> Payment:
+    """Test mode: one month of Pro paid by PromptPay. Later the gateway webhook confirms this instead."""
+    p = Payment(payment_id=new_id("pay"), booking_id=None, subscription_id=subscription_id,
+                payment_type="subscription", amount=amount, method="promptpay", status="paid",
+                gateway_ref=test_gateway_ref(), paid_at=timeutil.now())
+    db.add(p)
+    return p

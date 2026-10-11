@@ -247,3 +247,54 @@ class InboxOut(BaseModel):
 
 class CountOut(BaseModel):
     count: int
+
+
+# ---------- owner: dashboard, bookings, plan ----------
+
+class DayLoadOut(BaseModel):
+    date: date
+    count: int
+    capacity: Optional[int]  # None = closed
+
+
+class DashboardOut(BaseModel):
+    shop_id: str
+    shop_name: str
+    plan: PlanOut
+    usage: LimitOut
+    days: list[DayLoadOut]
+    date: date
+    queue: list[BookingOut]
+    alerts: list[NotificationOut]
+    pending_reminders: int
+
+
+class OwnerBookingsOut(BaseModel):
+    shop_name: str
+    filter: str
+    rows: list[BookingOut]
+    counts: dict[str, int]
+
+
+class CompleteIn(BaseModel):
+    method: str = ""
+
+
+class SubscriptionOut(ORMModel):
+    subscription_id: str
+    plan_id: str
+    start_date: date
+    end_date: Optional[date]
+    status: str
+
+
+class PlanPaymentOut(PaymentOut):
+    plan_name: str = ""
+
+
+class PlanPageOut(BaseModel):
+    plan: PlanOut
+    subscription: Optional[SubscriptionOut]
+    usage: LimitOut
+    plans: list[PlanOut]
+    payments: list[PlanPaymentOut]
