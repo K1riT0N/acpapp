@@ -1,11 +1,32 @@
 // Home: search and browse shops (prototype: vHome).
-// The sample ticket on the right, which links to a free time, is added in step 6 with the slots.
+// The sample ticket on the right links straight to a free afternoon time in the coming week.
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { Loading } from "@/components/States";
 import { api, useApi } from "@/lib/api";
-import { baht, openDaysText } from "@/lib/format";
+import { baht, fmtDate, fmtDateLong, openDaysText } from "@/lib/format";
+
+function HeroTicket({ slot }) {
+  const href = `/book/${slot.shop_id}/${slot.service_id}?date=${slot.date}&time=${slot.time}`;
+  return (
+    <Link className="hero-ticket" href={href}
+      aria-label={`Book ${slot.service_name} at ${slot.shop_name} on ${fmtDateLong(slot.date)} at ${slot.time}`}>
+      <article className="ticket">
+        <div className="stub">
+          <span className="stub-time">{slot.time}</span>
+          <span className="stub-date">{fmtDate(slot.date)}</span>
+          <span className="stub-ref">OPEN</span>
+        </div>
+        <div className="t-body">
+          <h3>{slot.service_name}</h3>
+          <p className="t-meta">{slot.shop_name}</p>
+          <p className="t-meta">Hold it with a {baht(slot.deposit)} deposit. Reminder the day before.</p>
+        </div>
+      </article>
+    </Link>
+  );
+}
 
 function ShopRow({ shop }) {
   const svcs = shop.services;
@@ -29,6 +50,7 @@ export default function Home() {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("");
   const all = useApi("/shops"); // every shop, for the category pills and the "no shops yet" message
+  const { data: sample } = useApi("/shops/sample-slot");
   const [shown, setShown] = useState(null);
 
   // Ask the API for matching shops, waiting 250 ms after the last key press
@@ -86,6 +108,7 @@ export default function Home() {
             </div>
           )}
         </div>
+        {sample && <HeroTicket slot={sample} />}
       </section>
 
       <section aria-labelledby="shops-h">

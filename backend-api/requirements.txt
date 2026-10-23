@@ -6,3 +6,5 @@ pydantic
 bcrypt
 PyJWT>=2.8
 tzdata
+APScheduler>=3.10,<4
+pytest>=8

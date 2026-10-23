@@ -51,7 +51,7 @@ export function fmtDT(iso) {
       timeZone: "Asia/Bangkok", day: "numeric", month: "numeric", hour: "2-digit", minute: "2-digit", hourCycle: "h23",
     }).formatToParts(d).map((p) => [p.type, p.value])
   );
-  return parts.day + " " + MON_S[Number(parts.month) - 1] + ", " + parts.hour + ":" + parts.minute;
+  return Number(parts.day) + " " + MON_S[Number(parts.month) - 1] + ", " + parts.hour + ":" + parts.minute;
 }
 
 export const baht = (n) => "฿" + Number(n || 0).toLocaleString("en-US");
@@ -81,3 +81,21 @@ export function openDaysText(hours) {
   const days = hours.length === 7 ? "daily" : compressDays(hours.map((h) => Number(h.day_of_week)));
   return "Open " + days + (same ? ", " + hours[0].open_time + "–" + hours[0].close_time : "") + ".";
 }
+
+// Booking status -> [label, chip colour], as in the prototype's STATUS
+export const STATUS = {
+  pending_payment: ["Awaiting deposit", "warn"],
+  confirmed: ["Confirmed", "ok"],
+  completed: ["Completed", "done"],
+  cancelled: ["Cancelled", "bad"],
+  no_show: ["No-show", "bad"],
+  expired: ["Expired", "mute"],
+};
+export const METHOD = { promptpay: "PromptPay", cash: "cash", card: "card" };
+export const chName = (c) => (c === "line" ? "LINE" : "Email");
+
+// Milliseconds from now until an ISO timestamp (negative when it's in the past)
+export const msUntil = (iso) => Date.parse(iso) - Date.now();
+
+// Has this booking's start time (Bangkok) not come yet?
+export const startsInFuture = (b) => Date.parse(`${b.booking_date}T${b.start_time}:00+07:00`) > Date.now();

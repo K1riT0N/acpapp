@@ -2,7 +2,7 @@
 
 The server itself may run in UTC, so never call date.today() or datetime.now() without a time zone.
 """
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 BANGKOK = ZoneInfo("Asia/Bangkok")
@@ -42,3 +42,12 @@ def month_name(d: date) -> str:
 def baht(amount: int) -> str:
     """'฿1,260', same as the prototype's baht()."""
     return f"฿{amount:,}"
+
+
+def add_months(d: date, n: int) -> date:
+    """Same day n months later; if that month is shorter, its last day (31 Jan + 1 month = 28 Feb)."""
+    month_index = d.month - 1 + n
+    year, month = d.year + month_index // 12, month_index % 12 + 1
+    next_month_first = date(year + (month == 12), month % 12 + 1, 1)
+    last_day = (next_month_first - timedelta(days=1)).day
+    return date(year, month, min(d.day, last_day))

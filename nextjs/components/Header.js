@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { loginHref, useAuth } from "@/lib/auth";
+import { useMessages } from "@/lib/messages";
 import { useToast } from "@/components/Toasts";
 
 function NavLink({ href, on, children }) {
@@ -17,6 +18,8 @@ export default function Header() {
   const router = useRouter();
   const { user, ready, signOut } = useAuth();
   const toast = useToast();
+  const { inbox } = useMessages();
+  const unread = inbox?.unread_count || 0;
   const p = router.pathname;
   const shopping = p === "/" || p.startsWith("/shops") || p.startsWith("/book/");
 
@@ -52,8 +55,10 @@ export default function Header() {
   if (user) {
     right = (
       <>
-        {/* Step 8 adds the unread-message badge here */}
-        <NavLink href="/inbox" on={p === "/inbox"}>Messages</NavLink>
+        <NavLink href="/inbox" on={p === "/inbox"}>
+          Messages
+          {unread > 0 && <span className="badge" aria-label={unread + " unread"}>{unread}</span>}
+        </NavLink>
         <span className="who">{String(user.full_name || "").split(" ")[0]}</span>
         <button className="btn small" onClick={logout}>Log out</button>
       </>

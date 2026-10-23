@@ -20,7 +20,9 @@ export function AuthProvider({ children }) {
     }
     api("/auth/me")
       .then(setUser)
-      .catch(() => setToken(null)) // expired or invalid token: treat as logged out
+      // Forget the token only when the server says it's invalid or expired (401). A network problem
+      // or a cancelled request must not log the person out.
+      .catch((e) => { if (e.status === 401) setToken(null); })
       .finally(() => setReady(true));
   }, []);
 
