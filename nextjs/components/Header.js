@@ -39,6 +39,8 @@ export default function Header() {
         <NavLink href="/my" on={p === "/my" || p.startsWith("/bookings/") || p.startsWith("/pay/")}>My bookings</NavLink>
       </>
     );
+  } else if (user.role === "admin") {
+    links = <NavLink href="/admin" on={p === "/admin"}>Analytics dashboard</NavLink>;
   } else {
     links = (
       <>

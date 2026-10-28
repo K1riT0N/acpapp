@@ -34,7 +34,7 @@ from database import Base
 
 ID_LEN = 40
 
-ROLES = ("customer", "shop_owner")
+ROLES = ("customer", "shop_owner", "admin")
 BOOKING_STATUSES = ("pending_payment", "confirmed", "completed", "cancelled", "no_show", "expired")
 PAYMENT_TYPES = ("deposit", "remaining", "subscription")
 PAYMENT_METHODS = ("promptpay", "cash", "card")

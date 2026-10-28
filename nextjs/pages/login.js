@@ -55,7 +55,7 @@ export default function Login() {
         <div className="panel">
           <h2>Demo accounts</h2>
           <p className="t-meta">
-            Every demo account uses the password <code>{DEMO_PASSWORD}</code>. Try a customer and a shop owner side by side.
+            Every demo account uses the password <code>{DEMO_PASSWORD}</code>. Use the Admin account to explore platform analytics.
           </p>
           {demo.map((d) => (
             <div className="demo-row" key={d.user_id}>
@@ -64,7 +64,9 @@ export default function Login() {
                 <p className="t-meta">
                   {d.role === "customer"
                     ? "Customer"
-                    : "Owner of " + (d.shop_name || "a shop") + (d.shop_name ? " (" + d.plan_name + ")" : "")}
+                    : d.role === "admin"
+                      ? "Admin"
+                      : "Owner of " + (d.shop_name || "a shop") + (d.shop_name ? " (" + d.plan_name + ")" : "")}
                   . {d.email}
                 </p>
               </div>

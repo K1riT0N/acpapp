@@ -269,6 +269,24 @@ class DashboardOut(BaseModel):
     pending_reminders: int
 
 
+class AdminMonthOut(BaseModel):
+    month: str
+    users: int
+    bookings: int
+    transactions: int
+    transaction_volume: int
+
+
+class AdminDashboardOut(BaseModel):
+    active_users: int
+    total_shops: int
+    transactions_this_month: int
+    transaction_volume_this_month: int
+    projected_mrr: int
+    projected_arr: int
+    months: list[AdminMonthOut]
+
+
 class OwnerBookingsOut(BaseModel):
     shop_name: str
     filter: str

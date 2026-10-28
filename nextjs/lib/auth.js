@@ -52,7 +52,7 @@ export function loginHref(path) {
 }
 
 // After logging in: go back to where the person came from (?next=...), or to their home page.
-// Owners are never sent to customer-only pages such as booking or paying.
+// Each role lands on its own dashboard unless it has a safe page to return to.
 export function useAfterLogin() {
   const router = useRouter();
   const toast = useToast();
@@ -62,7 +62,8 @@ export function useAfterLogin() {
     toast("Logged in as " + result.user.full_name + ".");
     const next = typeof router.query.next === "string" ? router.query.next : "";
     const ownerBad = result.user.role === "shop_owner" && /^\/(book|pay|my)(\/|$)/.test(next);
-    if (next.startsWith("/") && !next.startsWith("//") && next !== "/" && !ownerBad) router.push(next);
-    else router.push(result.user.role === "shop_owner" ? "/owner" : "/");
+    const adminBad = result.user.role === "admin" && !next.startsWith("/admin");
+    if (next.startsWith("/") && !next.startsWith("//") && next !== "/" && !ownerBad && !adminBad) router.push(next);
+    else router.push(result.user.role === "shop_owner" ? "/owner" : result.user.role === "admin" ? "/admin" : "/");
   };
 }

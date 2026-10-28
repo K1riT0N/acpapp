@@ -35,11 +35,12 @@ export function NotFor({ role }) {
   const { user, signOut } = useAuth();
   const router = useRouter();
   const customer = role === "customer";
+  const audience = { customer: "customers", shop_owner: "shop owners", admin: "admins" }[role] || "users";
   return (
     <div className="empty-state">
-      <h1>{customer ? "This page is for customers." : "This page is for shop owners."}</h1>
+      <h1>This page is for {audience}.</h1>
       <p className="lede">
-        You&apos;re logged in as {user?.full_name}. Log out, then log in with a {customer ? "customer" : "shop owner"} account.
+        You&apos;re logged in as {user?.full_name}. Log out, then log in with a {audience.slice(0, -1)} account.
       </p>
       <button className="btn" onClick={() => { signOut(); router.push("/login"); }}>Log out</button>
     </div>
