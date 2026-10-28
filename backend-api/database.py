@@ -5,7 +5,7 @@ to get a session for one request.
 """
 import os
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 DATABASE_URL = os.getenv(
@@ -29,3 +29,24 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+def migrate_user_roles() -> None:
+    """Allow the Admin role in databases created before it was added."""
+    if engine.dialect.name != "postgresql":
+        return
+
+    from models import ROLES, one_of
+
+    with engine.begin() as conn:
+        definition = conn.scalar(text(
+            "SELECT pg_get_constraintdef(oid) FROM pg_constraint "
+            "WHERE conrelid = 'users'::regclass AND conname = 'ck_users_role'"
+        ))
+        if definition and "'admin'" in definition:
+            return
+        if definition:
+            conn.execute(text("ALTER TABLE users DROP CONSTRAINT ck_users_role"))
+        conn.execute(text(
+            f"ALTER TABLE users ADD CONSTRAINT ck_users_role CHECK ({one_of('role', ROLES)})"
+        ))

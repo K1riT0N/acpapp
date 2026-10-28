@@ -75,7 +75,7 @@ def require_role(role: str):
     """Route dependency factory: require_role("shop_owner") lets only shop owners through."""
     def checker(user: User = Depends(get_current_user)) -> User:
         if user.role != role:
-            who = "customers" if role == "customer" else "shop owners"
+            who = {"customer": "customers", "shop_owner": "shop owners", "admin": "admins"}.get(role, role)
             raise HTTPException(status.HTTP_403_FORBIDDEN, f"This page is for {who}.")
         return user
     return checker

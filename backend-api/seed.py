@@ -18,7 +18,7 @@ import bcrypt
 from sqlalchemy import Date, DateTime, Time, select, text
 from sqlalchemy.exc import ProgrammingError
 
-from database import Base, SessionLocal, engine
+from database import Base, SessionLocal, engine, migrate_user_roles
 from models import Booking, BusinessHours, Notification, Payment, Plan, Service, Shop, Subscription, User
 
 BANGKOK = ZoneInfo("Asia/Bangkok")
@@ -144,6 +144,7 @@ if __name__ == "__main__":
     else:
         try:
             Base.metadata.create_all(bind=engine)  # in case the API hasn't started yet
+            migrate_user_roles()
         except ProgrammingError:
             raise SystemExit(
                 "The database still has tables from an older version of the app.\n"

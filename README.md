@@ -42,6 +42,7 @@ Every demo account uses the password **demo1234**. The login page has one-click 
 | noi@demo.nadd | Owner of Baan Suay Hair Studio (Free) |
 | mek@demo.nadd | Owner of Clean Ride Car Care (Pro) |
 | somjai@demo.nadd | Owner of Somjai Thai Massage (Free) |
+| admin@demo.nadd | Admin |
 
 The demo data (`backend-api/nadd_seed_data.json`) is written as if today were 23 Sep 2026. `seed.py` moves every
 date forward to today, so there are always bookings in today's queue and reminders still to come.
@@ -82,6 +83,11 @@ confirmations and reminders in Messages.
 month's usage and the latest alerts. On the day they mark each booking completed (choosing cash, PromptPay or card
 for the rest of the price) or a no-show. They manage services, shop details, the deposit rate and opening hours, and
 can upgrade to Pro or switch back to Free.
+
+**Admins** have a separate, read-only analytics dashboard with active account and shop totals, current-month paid
+transactions and payment volume, projected subscription MRR/ARR, and interactive charts for six months of activity.
+Account deactivation is not tracked, so the active-user total counts all registered accounts. Admin accounts are
+provisioned through the demo seed data and cannot be created through public sign-up.
 
 ## How it works
 
@@ -136,6 +142,7 @@ http://localhost:8000/docs.
 | Accounts | `POST /auth/register`, `POST /auth/login`, `GET /auth/me`, `GET /auth/demo-accounts` |
 | Customer | `POST /bookings`, `GET /bookings/me`, `GET /bookings/{id}`, `POST /bookings/{id}/pay-deposit`, `/release`, `/cancel` |
 | Shop owner | `GET /owner/dashboard`, `GET /owner/bookings?filter=`, `POST /owner/bookings/{id}/complete`, `/no-show`, `GET/POST /owner/services`, `PATCH /owner/services/{id}`, `GET/PATCH /owner/shop`, `PUT /owner/shop/hours`, `GET /owner/plan`, `POST /owner/plan/upgrade`, `/downgrade` |
+| Admin | `GET /admin/dashboard` (platform totals, paid transactions/payment volume, projected MRR/ARR and six-month chart data) |
 | Logged in | `GET /notifications/me`, `POST /notifications/read-all`, `POST /notifications/send-now` |
 
 ## Project structure

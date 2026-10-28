@@ -65,6 +65,16 @@
    "line_user_id": "U-demo-somjai",
    "demo": true,
    "created_at": "2026-08-15T09:00:00+07:00"
+  },
+  {
+   "user_id": "u_admin",
+   "full_name": "Nadd Admin",
+   "email": "admin@demo.nadd",
+   "phone": "",
+   "role": "admin",
+   "line_user_id": null,
+   "demo": true,
+   "created_at": "2026-09-01T09:00:00+07:00"
   }
  ],
  "shops": [

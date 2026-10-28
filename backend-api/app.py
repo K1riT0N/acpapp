@@ -14,9 +14,10 @@ from sqlalchemy.orm import Session
 import models  # noqa: F401  (importing it registers the 9 tables on Base, so create_all can see them)
 from core.errors import RuleError
 from core.limits import ensure_plans
-from database import Base, SessionLocal, engine, get_db
+from database import Base, SessionLocal, engine, get_db, migrate_user_roles
 import scheduler
 from routes.auth import router as auth_router
+from routes.admin import router as admin_router
 from routes.bookings import router as bookings_router
 from routes.notifications import router as notifications_router
 from routes.owner import router as owner_router
@@ -34,6 +35,7 @@ logging.getLogger("apscheduler").setLevel(logging.WARNING)
 async def lifespan(app: FastAPI):
     """Runs when the API starts and stops: tables, plans, and the background jobs."""
     Base.metadata.create_all(bind=engine)
+    migrate_user_roles()
     with SessionLocal() as db:
         ensure_plans(db)
     jobs = scheduler.start()
@@ -68,6 +70,7 @@ def validation_error(request: Request, exc: RequestValidationError):
 
 
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
+app.include_router(admin_router, prefix="/admin", tags=["admin"])
 app.include_router(plans_router, prefix="/plans", tags=["public"])
 app.include_router(shops_router, prefix="/shops", tags=["public"])
 app.include_router(bookings_router, prefix="/bookings", tags=["customer"])

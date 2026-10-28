@@ -43,10 +43,10 @@ def me(user: User = Depends(get_current_user)):
 
 @router.get("/demo-accounts", response_model=list[DemoAccountOut])
 def demo_accounts(db: Session = Depends(get_db)):
-    """Customers first, then shop owners, each A to Z."""
+    """Customers first, then shop owners and admins, each A to Z."""
     users = db.scalars(
         select(User).where(User.demo.is_(True))
-        .order_by(case((User.role == "customer", 0), else_=1), User.full_name)
+        .order_by(case((User.role == "customer", 0), (User.role == "shop_owner", 1), else_=2), User.full_name)
     ).all()
     result = []
     for u in users:
